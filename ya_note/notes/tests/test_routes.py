@@ -1,8 +1,11 @@
 from http import HTTPStatus
+
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.urls import reverse
+
 from notes.models import Note
+
 
 
 User = get_user_model()
@@ -20,6 +23,10 @@ class TestRoutes(TestCase):
             slug='adress',
             author=cls.author
         )
+        cls.author_client = Client()
+        cls.author_client.force_login(cls.author)
+        cls.reader_client = Client()
+        cls.reader_client.force_login(cls.reader)
 
     def test_anonymous_client(self):
         urls = (
