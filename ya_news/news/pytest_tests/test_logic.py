@@ -6,8 +6,8 @@ from pytest_django.asserts import assertFormError, assertRedirects
 
 from random import choice
 
-from news.models import Comment
 from news.forms import BAD_WORDS, WARNING
+from news.models import Comment
 
 
 COMMENT_FORM = {'text': 'Текст'}
