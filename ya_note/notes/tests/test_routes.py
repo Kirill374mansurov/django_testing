@@ -26,60 +26,71 @@ class TestRoutes(TestCase):
         cls.author_client.force_login(cls.author)
         cls.reader_client = Client()
         cls.reader_client.force_login(cls.reader)
+        cls.url_home = reverse('notes:home')
+        cls.url_login = reverse('users:login')
+        cls.url_logout = reverse('users:logout')
+        cls.url_signup = reverse('users:signup')
+        cls.url_list = reverse('notes:list')
+        cls.url_success = reverse('notes:success')
+        cls.url_edit = reverse(
+            'notes:edit', args=(cls.note.slug,)
+        )
+        cls.url_delete = reverse(
+            'notes:delete', args=(cls.note.slug,)
+        )
+        cls.url_detail = reverse(
+            'notes:detail', args=(cls.note.slug,)
+        )
+        cls.url_add = reverse('notes:add')
 
     def test_anonymous_client(self):
         urls = (
-            ('notes:home', None),
-            ('users:login', None),
-            ('users:logout', None),
-            ('users:signup', None),
+            self.url_home,
+            self.url_login,
+            self.url_logout,
+            self.url_signup,
         )
-        for name, args in urls:
-            with self.subTest(name=name):
-                url = reverse(name, args=args)
+        for url in urls:
+            with self.subTest():
                 response = self.client.get(url)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_pages_availability(self):
-        self.client.force_login(self.author)
         urls = (
-            'notes:home',
-            'notes:success',
-            'notes:list',
-            'users:login',
-            'users:logout',
-            'users:signup'
+            self.url_success,
+            self.url_list,
+            self.url_home,
+            self.url_login,
+            self.url_logout,
+            self.url_signup,
         )
-        for name in urls:
-            with self.subTest(name=name):
-                url = reverse(name)
-                response = self.client.get(url)
+        for url in urls:
+            with self.subTest():
+                response = self.author_client.get(url)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_availability_for_notes_edit_and_delete(self):
         users_statuses = (
-            (self.author, HTTPStatus.OK),
-            (self.reader, HTTPStatus.NOT_FOUND),
+            (self.author_client, HTTPStatus.OK),
+            (self.reader_client, HTTPStatus.NOT_FOUND),
         )
-        for user, status in users_statuses:
-            self.client.force_login(user)
-
-            for name in ('notes:edit', 'notes:delete', 'notes:detail'):
-                with self.subTest(user=user, name=name):
-                    url = reverse(name, args=(self.note.slug,))
-                    response = self.client.get(url)
+        for user_client, status in users_statuses:
+            for url in (self.url_edit, self.url_delete, self.url_detail):
+                with self.subTest():
+                    response = user_client.get(url)
                     self.assertEqual(response.status_code, status)
 
     def test_redirect_for_anonymous_client(self):
-        login_url = reverse('users:login')
-        url_slug_false = ('notes:list', 'notes:add', 'notes:success')
-        url_slug_true = ('notes:edit', 'notes:delete', 'notes:detail')
-        for name in url_slug_true + url_slug_false:
-            with self.subTest(name=name):
-                if name in url_slug_true:
-                    url = reverse(name, args=(self.note.slug,))
-                else:
-                    url = reverse(name)
-                redirect_url = f'{login_url}?next={url}'
+        urls = (
+            self.url_list,
+            self.url_add,
+            self.url_success,
+            self.url_edit,
+            self.url_delete,
+            self.url_detail
+        )
+        for url in urls:
+            with self.subTest():
+                redirect_url = f'{self.url_login}?next={url}'
                 response = self.client.get(url)
                 self.assertRedirects(response, redirect_url)
