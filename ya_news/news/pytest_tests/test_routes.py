@@ -1,4 +1,4 @@
-from http import HTTPStatus as ht
+from http import HTTPStatus
 
 import pytest
 from pytest_django.asserts import assertRedirects
@@ -12,47 +12,47 @@ from pytest_lazyfixture import lazy_fixture as lf
         (
             lf('home_url'),
             lf('client'),
-            ht.OK
+            HTTPStatus.OK
         ),
         (
             lf('login_url'),
             lf('client'),
-            ht.OK
+            HTTPStatus.OK
         ),
         (
             lf('logout_url'),
             lf('client'),
-            ht.OK
+            HTTPStatus.OK
         ),
         (
             lf('signup_url'),
             lf('client'),
-            ht.OK
+            HTTPStatus.OK
         ),
         (
             lf('edit_url'),
             lf('author_client'),
-            ht.OK
+            HTTPStatus.OK
         ),
         (
             lf('edit_url'),
             lf('not_author_client'),
-            ht.NOT_FOUND
+            HTTPStatus.NOT_FOUND
         ),
         (
             lf('delete_url'),
             lf('author_client'),
-            ht.OK
+            HTTPStatus.OK
         ),
         (
             lf('delete_url'),
             lf('not_author_client'),
-            ht.NOT_FOUND
+            HTTPStatus.NOT_FOUND
         ),
         (
             lf('detail_url'),
             lf('client'),
-            ht.OK
+            HTTPStatus.OK
         ),
     ),
 )
@@ -65,8 +65,8 @@ def test_pages_availability(reverse_url, parametrized_client, status):
 @pytest.mark.parametrize(
     'reverse_url',
     (
-        pytest.lazy_fixture('edit_url'),
-        pytest.lazy_fixture('delete_url'),
+        lf('edit_url'),
+        lf('delete_url'),
     ),
 )
 def test_redirect_for_anonymous_client(
