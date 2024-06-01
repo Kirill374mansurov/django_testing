@@ -1,4 +1,4 @@
-from http import HTTPStatus as HT
+from http import HTTPStatus as ht
 
 import pytest
 from pytest_django.asserts import assertRedirects
@@ -12,47 +12,47 @@ from pytest_lazyfixture import lazy_fixture as lf
         (
             lf('home_url'),
             lf('client'),
-            HT.OK
+            ht.OK
         ),
         (
             lf('login_url'),
             lf('client'),
-            HT.OK
+            ht.OK
         ),
         (
             lf('logout_url'),
             lf('client'),
-            HT.OK
+            ht.OK
         ),
         (
             lf('signup_url'),
             lf('client'),
-            HT.OK
+            ht.OK
         ),
         (
             lf('edit_url'),
             lf('author_client'),
-            HT.OK
+            ht.OK
         ),
         (
             lf('edit_url'),
             lf('not_author_client'),
-            HT.NOT_FOUND
+            ht.NOT_FOUND
         ),
         (
             lf('delete_url'),
             lf('author_client'),
-            HT.OK
+            ht.OK
         ),
         (
             lf('delete_url'),
             lf('not_author_client'),
-            HT.NOT_FOUND
+            ht.NOT_FOUND
         ),
         (
             lf('detail_url'),
             lf('client'),
-            HT.OK
+            ht.OK
         ),
     ),
 )
