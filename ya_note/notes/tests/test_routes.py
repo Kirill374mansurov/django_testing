@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, get_user
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -51,7 +51,7 @@ class TestRoutes(TestCase):
             self.url_signup,
         )
         for url in urls:
-            with self.subTest():
+            with self.subTest(url=url):
                 response = self.client.get(url)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
@@ -65,7 +65,7 @@ class TestRoutes(TestCase):
             self.url_signup,
         )
         for url in urls:
-            with self.subTest():
+            with self.subTest(url=url):
                 response = self.author_client.get(url)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
 
@@ -76,7 +76,7 @@ class TestRoutes(TestCase):
         )
         for user_client, status in users_statuses:
             for url in (self.url_edit, self.url_delete, self.url_detail):
-                with self.subTest():
+                with self.subTest(data=(url, get_user(user_client), status)):
                     response = user_client.get(url)
                     self.assertEqual(response.status_code, status)
 
@@ -90,7 +90,7 @@ class TestRoutes(TestCase):
             self.url_detail
         )
         for url in urls:
-            with self.subTest():
+            with self.subTest(url=url):
                 redirect_url = f'{self.url_login}?next={url}'
                 response = self.client.get(url)
                 self.assertRedirects(response, redirect_url)

@@ -130,7 +130,7 @@ class TestNoteEditDelete(TestCase):
         Note.objects.all().delete()
         old_count = Note.objects.count()
         response = self.author_client.post(self.add_url, data=self.form_note)
-        self.assertRedirects(response, reverse('notes:success'))
+        self.assertRedirects(response, self.done)
         self.assertEqual(Note.objects.count(), old_count + 1)
         new_note = Note.objects.get()
         expected_slug = slugify(self.form_note['title'])
