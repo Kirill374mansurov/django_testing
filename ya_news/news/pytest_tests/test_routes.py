@@ -1,8 +1,8 @@
+from http import HTTPStatus as HT
+
 import pytest
-
-from http import HTTPStatus
-
 from pytest_django.asserts import assertRedirects
+from pytest_lazyfixture import lazy_fixture as lf
 
 
 @pytest.mark.django_db
@@ -10,49 +10,49 @@ from pytest_django.asserts import assertRedirects
     'reverse_url, parametrized_client, status',
     (
         (
-            pytest.lazy_fixture('home_url'),
-            pytest.lazy_fixture('client'),
-            HTTPStatus.OK
+            lf('home_url'),
+            lf('client'),
+            HT.OK
         ),
         (
-            pytest.lazy_fixture('login_url'),
-            pytest.lazy_fixture('client'),
-            HTTPStatus.OK
+            lf('login_url'),
+            lf('client'),
+            HT.OK
         ),
         (
-            pytest.lazy_fixture('logout_url'),
-            pytest.lazy_fixture('client'),
-            HTTPStatus.OK
+            lf('logout_url'),
+            lf('client'),
+            HT.OK
         ),
         (
-            pytest.lazy_fixture('signup_url'),
-            pytest.lazy_fixture('client'),
-            HTTPStatus.OK
+            lf('signup_url'),
+            lf('client'),
+            HT.OK
         ),
         (
-            pytest.lazy_fixture('edit_url'),
-            pytest.lazy_fixture('author_client'),
-            HTTPStatus.OK
+            lf('edit_url'),
+            lf('author_client'),
+            HT.OK
         ),
         (
-            pytest.lazy_fixture('edit_url'),
-            pytest.lazy_fixture('not_author_client'),
-            HTTPStatus.NOT_FOUND
+            lf('edit_url'),
+            lf('not_author_client'),
+            HT.NOT_FOUND
         ),
         (
-            pytest.lazy_fixture('delete_url'),
-            pytest.lazy_fixture('author_client'),
-            HTTPStatus.OK
+            lf('delete_url'),
+            lf('author_client'),
+            HT.OK
         ),
         (
-            pytest.lazy_fixture('delete_url'),
-            pytest.lazy_fixture('not_author_client'),
-            HTTPStatus.NOT_FOUND
+            lf('delete_url'),
+            lf('not_author_client'),
+            HT.NOT_FOUND
         ),
         (
-            pytest.lazy_fixture('detail_url'),
-            pytest.lazy_fixture('client'),
-            HTTPStatus.OK
+            lf('detail_url'),
+            lf('client'),
+            HT.OK
         ),
     ),
 )

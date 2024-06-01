@@ -1,14 +1,11 @@
-import pytest
-
 from http import HTTPStatus
-
-from pytest_django.asserts import assertFormError, assertRedirects
-
 from random import choice
+
+import pytest
+from pytest_django.asserts import assertFormError, assertRedirects
 
 from news.forms import BAD_WORDS, WARNING
 from news.models import Comment
-
 
 COMMENT_FORM = {'text': 'Текст'}
 
@@ -88,10 +85,12 @@ def test_author_can_edit_comment(
 
 
 def test_user_cant_edit_comment_of_another_user(
-        not_author_client, comment, edit_url
+        not_author_client, comment, edit_url, author, news
 ):
     old_text = comment.text
     response = not_author_client.post(edit_url, data=FORM_DATA)
     assert response.status_code == HTTPStatus.NOT_FOUND
     refresh_comment = Comment.objects.get(id=comment.id)
     assert refresh_comment.text == old_text
+    assert refresh_comment.author == author
+    assert refresh_comment.news == news
