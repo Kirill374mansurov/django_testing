@@ -37,10 +37,9 @@ class TestListNotes(TestCase):
 
     def test_list_content_author(self):
         response = self.author_client.get(self.url_list)
-        with self.subTest():
-            self.assertIn('object_list', response.context)
-            self.assertIn(self.note_one, response.context['object_list'])
-            self.assertNotIn(self.note_two, response.context['object_list'])
+        self.assertIn('object_list', response.context)
+        self.assertIn(self.note_one, response.context['object_list'])
+        self.assertNotIn(self.note_two, response.context['object_list'])
 
     def test_pages_contains_form(self):
         urls = (
